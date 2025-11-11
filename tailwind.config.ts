@@ -59,9 +59,13 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        card: "0 2px 8px rgba(0,0,0,.06)",
       },
       keyframes: {
         "accordion-down": {
