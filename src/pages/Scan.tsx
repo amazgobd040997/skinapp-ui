@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Search, Sparkles, ScanLine } from 'lucide-react';
+import { Camera, Search, Sparkles, ScanLine, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useScannedProducts } from '@/contexts/ScannedProductsContext';
 import BottomNav from '@/components/BottomNav';
 
 export default function Scan() {
   const [isScanning, setIsScanning] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showResult, setShowResult] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { scannedProducts, addScannedProduct } = useScannedProducts();
 
   // Mock product result
   const mockProduct = {
@@ -21,12 +22,8 @@ export default function Scan() {
     name: 'Hydrating Face Serum',
     brand: 'GlowLab',
     image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop',
-    barcode: '1234567890123',
     score: 92,
     verdict: 'good' as const,
-    matchedGoals: ['Hydration', 'Anti-aging'],
-    allergyFlags: 0,
-    ingredients: ['Hyaluronic Acid', 'Vitamin C', 'Niacinamide', 'Glycerin', 'Peptides'],
   };
 
   const handleScan = () => {
@@ -34,11 +31,12 @@ export default function Scan() {
     // Simulate scanning delay
     setTimeout(() => {
       setIsScanning(false);
-      setShowResult(true);
+      addScannedProduct(mockProduct);
       toast({
         title: 'Product Scanned!',
         description: 'Analyzing ingredients...',
       });
+      navigate(`/product/${mockProduct.id}`);
     }, 2000);
   };
 
@@ -51,11 +49,12 @@ export default function Scan() {
       });
       return;
     }
-    setShowResult(true);
+    addScannedProduct(mockProduct);
     toast({
       title: 'Product Found!',
       description: 'Analyzing ingredients...',
     });
+    navigate(`/product/${mockProduct.id}`);
   };
 
   const getVerdictColor = (verdict: string) => {
