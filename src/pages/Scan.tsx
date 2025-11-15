@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Camera, Search, Sparkles, ScanLine, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useScannedProducts } from '@/contexts/ScannedProductsContext';
@@ -78,147 +78,94 @@ export default function Scan() {
           <Sparkles className="w-8 h-8 text-primary" />
         </div>
 
-        {!showResult ? (
-          <>
-            {/* Camera Scanner */}
-            <Card className="overflow-hidden">
-              <CardContent className="p-0">
-                <div className="relative aspect-square bg-muted flex items-center justify-center">
-                  {isScanning ? (
-                    <div className="flex flex-col items-center gap-4">
-                      <ScanLine className="w-16 h-16 text-primary animate-pulse" />
-                      <p className="text-sm text-muted-foreground">Scanning barcode...</p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center gap-4 p-8 text-center">
-                      <Camera className="w-16 h-16 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground">
-                        Position the barcode within the frame
-                      </p>
-                    </div>
-                  )}
-                  {/* Scanning frame overlay */}
-                  <div className="absolute inset-0 border-2 border-primary/20 m-12 rounded-lg pointer-events-none" />
+        {/* Camera Scanner */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-0">
+            <div className="relative aspect-square bg-muted flex items-center justify-center">
+              {isScanning ? (
+                <div className="flex flex-col items-center gap-4">
+                  <ScanLine className="w-16 h-16 text-primary animate-pulse" />
+                  <p className="text-sm text-muted-foreground">Scanning barcode...</p>
                 </div>
-                <div className="p-4">
-                  <Button 
-                    onClick={handleScan} 
-                    disabled={isScanning}
-                    className="w-full"
-                    size="lg"
-                  >
-                    {isScanning ? 'Scanning...' : 'Scan Barcode'}
-                  </Button>
+              ) : (
+                <div className="flex flex-col items-center gap-4 p-8 text-center">
+                  <Camera className="w-16 h-16 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">
+                    Position the barcode within the frame
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Manual Search */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Or search manually</CardTitle>
-                <CardDescription>Enter product name or barcode</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="e.g., Hydrating Face Serum"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleManualSearch()}
-                  />
-                  <Button onClick={handleManualSearch} size="icon">
-                    <Search className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </>
-        ) : (
-          /* Product Result */
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <img
-                    src={mockProduct.image}
-                    alt={mockProduct.name}
-                    className="w-24 h-24 rounded-lg object-cover"
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground">{mockProduct.brand}</p>
-                    <h3 className="text-lg font-semibold">{mockProduct.name}</h3>
-                    <div className="flex gap-2 mt-2">
-                      <Badge className={getVerdictColor(mockProduct.verdict)}>
-                        {mockProduct.verdict.toUpperCase()}
-                      </Badge>
-                      <Badge variant="secondary">Score: {mockProduct.score}</Badge>
-                      {mockProduct.allergyFlags === 0 && (
-                        <Badge variant="outline" className="text-green-600">
-                          No Allergy Flags
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Matched Goals */}
-            {mockProduct.matchedGoals.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Matches Your Goals</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {mockProduct.matchedGoals.map((goal) => (
-                      <Badge key={goal} variant="secondary">
-                        ✓ {goal}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Key Ingredients */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Key Ingredients</CardTitle>
-                <CardDescription>Top 5 active ingredients</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {mockProduct.ingredients.map((ingredient, idx) => (
-                    <div key={idx} className="flex items-center gap-2 p-2 rounded-md bg-muted/50">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">
-                        {idx + 1}
-                      </div>
-                      <span className="text-sm">{ingredient}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Actions */}
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowResult(false)}
-                className="flex-1"
+              )}
+              {/* Scanning frame overlay */}
+              <div className="absolute inset-0 border-2 border-primary/20 m-12 rounded-lg pointer-events-none" />
+            </div>
+            <div className="p-4">
+              <Button 
+                onClick={handleScan} 
+                disabled={isScanning}
+                className="w-full"
+                size="lg"
               >
-                Scan Another
-              </Button>
-              <Button
-                onClick={() => navigate('/dashboard')}
-                className="flex-1"
-              >
-                Add to Routine
+                {isScanning ? 'Scanning...' : 'Scan Barcode'}
               </Button>
             </div>
-          </div>
+          </CardContent>
+        </Card>
+
+        {/* Manual Search */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Or search manually</CardTitle>
+            <CardDescription>Enter product name or barcode</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                placeholder="e.g., Hydrating Face Serum"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleManualSearch()}
+              />
+              <Button onClick={handleManualSearch} size="icon">
+                <Search className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Scans */}
+        {scannedProducts.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <History className="w-5 h-5" />
+                Recent Scans
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {scannedProducts.slice(0, 5).map((product) => (
+                  <div
+                    key={product.id}
+                    onClick={() => navigate(`/product/${product.id}`)}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer transition-colors"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 rounded-md object-cover"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{product.name}</p>
+                      <p className="text-sm text-muted-foreground">{product.brand}</p>
+                    </div>
+                    <Badge className={getVerdictColor(product.verdict)}>
+                      {product.score}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
 
