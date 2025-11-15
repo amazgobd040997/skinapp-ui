@@ -7,18 +7,22 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { 
   Sparkles, Camera, Award, Gift, ChevronRight, Menu, 
-  AlertCircle, TrendingUp, Plus, Edit
+  AlertCircle, TrendingUp, Plus, Edit, CreditCard, Settings,
+  Bell, Lock, User, HelpCircle, LogOut
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getMockDashboardData } from '@/lib/mockData';
 import BottomNav from '@/components/BottomNav';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Separator } from '@/components/ui/separator';
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -60,9 +64,126 @@ export default function Dashboard() {
       <div className="relative bg-gradient-to-br from-primary/10 to-accent/10 p-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-4">
-            <button className="p-2 hover:bg-background/50 rounded-lg">
-              <Menu className="w-6 h-6" />
-            </button>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+              <SheetTrigger asChild>
+                <button className="p-2 hover:bg-background/50 rounded-lg">
+                  <Menu className="w-6 h-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80">
+                <SheetHeader>
+                  <SheetTitle>Menu</SheetTitle>
+                </SheetHeader>
+                
+                <div className="mt-6 space-y-6">
+                  {/* Payment Section */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                      <CreditCard className="w-4 h-4" />
+                      Payment
+                    </h3>
+                    <div className="space-y-1">
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to payment method page
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <CreditCard className="w-5 h-5 text-muted-foreground" />
+                        <span>Payment Methods</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to subscription page
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <Award className="w-5 h-5 text-muted-foreground" />
+                        <span>Subscription</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to billing history
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <TrendingUp className="w-5 h-5 text-muted-foreground" />
+                        <span>Billing History</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Settings Section */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Settings
+                    </h3>
+                    <div className="space-y-1">
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          navigate('/profile');
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <User className="w-5 h-5 text-muted-foreground" />
+                        <span>Profile Settings</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to notifications settings
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <Bell className="w-5 h-5 text-muted-foreground" />
+                        <span>Notifications</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to privacy settings
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <Lock className="w-5 h-5 text-muted-foreground" />
+                        <span>Privacy & Security</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setMenuOpen(false);
+                          // Navigate to help page
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted text-left"
+                      >
+                        <HelpCircle className="w-5 h-5 text-muted-foreground" />
+                        <span>Help & Support</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Logout */}
+                  <button 
+                    onClick={() => {
+                      logout();
+                      setMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-destructive/10 text-destructive text-left"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </SheetContent>
+            </Sheet>
             <Badge variant="secondary">Welcome back</Badge>
             <button className="p-2 hover:bg-background/50 rounded-lg">
               <span className="text-xl">⋯</span>
