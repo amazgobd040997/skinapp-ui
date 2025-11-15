@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useScannedProducts } from '@/contexts/ScannedProductsContext';
-import BottomNav from '@/components/BottomNav';
+import { AppLayout } from '@/components/AppLayout';
 
 export default function Scan() {
   const [isScanning, setIsScanning] = useState(false);
@@ -67,7 +67,7 @@ export default function Scan() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <AppLayout>
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -168,8 +168,6 @@ export default function Scan() {
           </Card>
         )}
       </div>
-
-      <BottomNav />
-    </div>
+    </AppLayout>
   );
 }

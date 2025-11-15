@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import BottomNav from '@/components/BottomNav';
+import { AppLayout } from '@/components/AppLayout';
 
 export default function Profile() {
   const { user, updateUser, logout } = useAuth();
@@ -87,7 +87,7 @@ export default function Profile() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <AppLayout>
       <div className="container max-w-2xl mx-auto p-4 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -368,8 +368,6 @@ export default function Profile() {
           </Button>
         </div>
       </div>
-
-      <BottomNav />
-    </div>
+    </AppLayout>
   );
 }
