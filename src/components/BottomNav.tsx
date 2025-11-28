@@ -9,7 +9,6 @@ export default function BottomNav() {
   const tabs = [
     { name: 'Home', icon: Home, path: '/' },
     { name: 'Scan', icon: Camera, path: '/scan' },
-    { name: 'Routine', icon: Calendar, path: '/routine' },
     { name: 'Profile', icon: User, path: '/profile' }
   ];
 
